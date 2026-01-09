@@ -143,7 +143,7 @@ const register: ModRegistrar = (moduleRegistry) => {
         .${debugUIClasses["inspector"]} {
             flex-direction: row;
             width: 100%;
-            background-color: transparent;
+            background: transparent;
         }
 
         .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]} {
@@ -155,19 +155,19 @@ const register: ModRegistrar = (moduleRegistry) => {
         .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]},
         .${debugUIClasses["output-column"]} .${debugUIClasses["output"]},
         .${debugUIClasses["tab-bar"]} {
-            box-shadow: 0px 0px 16rem 0px rgb(0 0 0 / 64%);
-            background-color: rgba(9, 13, 21, 0.69);
-            backdrop-filter:  var(--panelBlur) ;
+            box-shadow: 0px 0px 16rem 0px rgb(0, 0, 0, 0.6);
+            background: rgba(9, 13, 21, 0.6);
+            backdrop-filter:  var(--panelBlur);
             border-radius: 8rem;
         }
         .${debugUIClasses["tab-bar"]} {
-            background-color: rgba(9, 13, 21, 0.69);
+            background: rgba(9, 13, 21, 0.6);
         }
         .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]}, {
-            background-color: rgba(9, 13, 21, 0.69);
+            background: rgba(9, 13, 21, 0.6);
         }
         .${debugUIClasses["output-column"]} .${debugUIClasses["output"]} {
-            background-color: rgba(9, 13, 21, 0.94);
+            background: rgba(9, 13, 21, 0.95);
         }
 
         .${debugUIClasses["output-column"]} {
