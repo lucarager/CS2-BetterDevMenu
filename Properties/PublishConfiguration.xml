@@ -2,43 +2,44 @@
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 	<ModId Value="123039" />
 	<!--Name of the mod to display to players-->
-	<DisplayName Value="Slightly Better Dev Menu" />
+	<DisplayName Value="Better Dev Menu" />
 	<!--Short description of the mod-->
-	<ShortDescription Value="A small mod that updates the dev menu UI to be slightly more readable." />
+	<ShortDescription Value="A mod that updates the dev menu UI." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
-		Updates the dev menu UI  
-			* Slightly larger font size for better readability  
-			* Wider window to accommodate longer debug information  
-			* Vertical navigation for improved usability  
-			* Slightly adjusted padding and margins for a cleaner look  
+Updates the Dev Menu UI (accessible by pressing TAB)
+
+- Updates UI to be more in line with the rest of the game's UI  
+- Adds ability to resize the window  
+- Slightly larger font size for better readability  
+- New navigation UI  
+- Slightly adjusted padding and margins for a cleaner look  
 	</LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumb.png" />
+	<Thumbnail Value="Properties/thumbnail.png" />
 	<!--Screenshot, can be set multiple times-->
-	<Screenshot Value="Properties/S1.jpg" />
-	<Screenshot Value="Properties/S2.jpg" />
+	<Screenshot Value="Properties/1.jpg" />
+	<Screenshot Value="Properties/2.jpg" />
+	<Screenshot Value="Properties/3.jpg" />
 	<!--Tag, can be set multiple times-->
 	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.0.1" />
+	<ModVersion Value="1.0.6" />
 	<!--Recommended version of the base game to use the mod-->
-	<GameVersion Value="1.3.*" />
+	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 	<ChangeLog>
-		V 1.0.1
-		- Fixed Menu too long on some resolutions. Menu is now slighly more compact and can scroll
-		- Fixed "Debug UI Alert" was underneath the debug panel and could not be clicked.
-		- Fixed UI Binding output too wide in some cases.
+Update for Skyve.
 	</ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
+	<ExternalLink Type="kofi" Url="https://ko-fi.com/lucadevdesign" />
 	<ExternalLink Type="github" Url="https://github.com/lucarager/CS2-BetterDevMenu" />
 	<ExternalLink Type="discord" Url="https://discord.gg/HTav7ARPs2" />
 </Publish>

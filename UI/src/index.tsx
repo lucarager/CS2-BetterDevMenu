@@ -1,4 +1,7 @@
-import { ModRegistrar } from "cs2/modding";
+import { ModRegistrar, ModuleRegistryExtend } from "cs2/modding";
+import { initialize } from "vanilla/Components";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./index.module.scss";
 
 /**
     debug-ui:
@@ -35,7 +38,77 @@ import { ModRegistrar } from "cs2/modding";
         hintItem
  */
 
+import icon from "./range.svg";
+import { FocusDisabled } from "cs2/input";
+
+export const DevMenuWrapper: ModuleRegistryExtend = (Component) => {
+    const PlatterMouseToolOptionsComponent = (props: any) => {
+        const { children, ...otherProps } = props || {};
+        const initialWidth = window.innerWidth * 0.45;
+        const maxWidth = window.innerWidth * 0.8;
+        const minWidth = window.innerWidth * 0.2;
+        const [leftWidth, setLeftWidth] = useState(initialWidth);
+        const [isDragging, setIsDragging] = useState(false);
+        const containerRef = useRef<HTMLDivElement>(null);
+
+        // Function to handle the drag (mousemove event)
+        const handleMouseMove = useCallback((e: MouseEvent) => {
+            if (containerRef.current) {
+                const newWidth = e.clientX - containerRef.current.getBoundingClientRect().left;
+                if (newWidth > minWidth && newWidth < maxWidth) {
+                    setLeftWidth(newWidth);
+                }
+            }
+        }, []);
+
+        // Function to stop the drag (mouseup event)
+        const handleMouseUp = useCallback(() => {
+            setIsDragging(false);
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        }, [handleMouseMove]);
+
+        // Function to start the drag (mousedown event on the gutter)
+        const handleMouseDown = useCallback(() => {
+            setIsDragging(true);
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+        }, [handleMouseMove, handleMouseUp]);
+
+        useEffect(() => {
+            // This function runs when the component unmounts
+            return () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUp);
+            };
+        }, [handleMouseMove, handleMouseUp]);
+
+        return (
+            <>
+                <div className={styles.panel_container} ref={containerRef}>
+                    <div className={styles.left} style={{ width: leftWidth }}>
+                        <Component {...otherProps}>{children}</Component>
+                    </div>
+                    <FocusDisabled>
+                        <div
+                            className={[styles.gutter, isDragging ? styles.active : null].join(" ")}
+                            onMouseDown={handleMouseDown}>
+                            <img className={styles.icon} src={icon} />
+                        </div>
+                    </FocusDisabled>
+                </div>
+            </>
+        );
+    };
+
+    return PlatterMouseToolOptionsComponent;
+};
+
 const register: ModRegistrar = (moduleRegistry) => {
+    initialize(moduleRegistry);
+
+    moduleRegistry.extend("game-ui/debug/components/debug-ui.tsx", "DebugUI", DevMenuWrapper);
+
     const debugUIClasses = moduleRegistry.registry.get(
         "game-ui/debug/components/debug-ui.module.scss",
     )?.classes;
@@ -50,10 +123,10 @@ const register: ModRegistrar = (moduleRegistry) => {
     style.type = "text/css";
     style.innerHTML = `
         .${debugUIClasses["debug-ui"]} {
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 5vw;
+            top: 8rem;
+            left: 8rem;
+            bottom: 8rem;
+            right: 8rem;
             display: flex;
             flex-direction: row;
         }
@@ -69,11 +142,43 @@ const register: ModRegistrar = (moduleRegistry) => {
 
         .${debugUIClasses["inspector"]} {
             flex-direction: row;
-            width: 66%;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]} {
+            flex-direction: row;
+            width: 100%;
+        }
+
+        // APPEARANCE
+        .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]},
+        .${debugUIClasses["output-column"]} .${debugUIClasses["output"]},
+        .${debugUIClasses["tab-bar"]} {
+            box-shadow: 0px 0px 16rem 0px rgb(0 0 0 / 64%);
+            background-color: rgba(9, 13, 21, 0.69);
+            backdrop-filter:  var(--panelBlur) ;
+            border-radius: 8rem;
+        }
+        .${debugUIClasses["tab-bar"]} {
+            background-color: rgba(9, 13, 21, 0.69);
+        }
+        .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]}, {
+            background-color: rgba(9, 13, 21, 0.69);
+        }
+        .${debugUIClasses["output-column"]} .${debugUIClasses["output"]} {
+            background-color: rgba(9, 13, 21, 0.94);
         }
 
         .${debugUIClasses["output-column"]} {
-            width: 33%;
+            width: 30vw;
+            margin-left: 8rem;
+            border-radius: 8rem;
+            pointer-events: none;
+        }
+
+        .${debugUIClasses["output-column"]} > .${scrollableClasses["track"]} {
+            pointer-events: auto;
         }
 
         .${debugUIClasses["output-column"]} .${debugUIClasses["scrollable"]} {
@@ -86,38 +191,28 @@ const register: ModRegistrar = (moduleRegistry) => {
 
         .${debugUIClasses["output-column"]} .${debugUIClasses["output"]} {
             min-height: 100%;
-            background: rgba(14, 18, 36, 0.82);
+            pointer-events: auto;
         }
-
 
         .${debugUIClasses["tab-bar"]} {
             flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.25);
             padding-left: 0;
             padding-right: 0;
             width: 200rem;
             overflow-x: auto;
             overflow-y: scroll;
             flex-wrap: nowrap;
-        }
-
-        .${debugUIClasses["tab-bar"]}: {
-            flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.25);
-            padding-left: 0;
-            padding-right: 0;
-            width: 200rem;
-            flex-wrap: nowrap;
+            margin-right: 8rem;
         }
 
         .${debugUIClasses["tab-bar"]} > button {
             border: none;
             text-align: left;
             font-size: 1em;
-            padding-left: 16rem;
-            padding-right: 16rem;
-            padding-top: 4rem;
-            padding-bottom: 4rem;
+            padding-left: 12rem;
+            padding-right: 8rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
             font-weight: 600;
         }
 
@@ -130,8 +225,12 @@ const register: ModRegistrar = (moduleRegistry) => {
             --contentPadding: 20rem;
         }
 
+        .${debugUIClasses["inspector"]} > .${scrollableClasses["scrollable"]} > .${scrollableClasses.content} {
+            padding: 20rem;
+            padding-right: 24rem;
+        }
 
-        .${debugUIClasses["scrollable"]} .${scrollableClasses.content} > * {
+        .${debugUIClasses["inspector"]} .${scrollableClasses["scrollable"]} .${scrollableClasses.content} > * {
             margin-bottom: 10rem;
         }
     `;
