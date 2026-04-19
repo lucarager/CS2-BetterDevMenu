@@ -163,7 +163,7 @@ const register: ModRegistrar = (moduleRegistry) => {
         .${debugUIClasses["tab-bar"]} {
             background: rgba(9, 13, 21, 0.6);
         }
-        .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]}, {
+        .${debugUIClasses["inspector"]} .${debugUIClasses["scrollable"]} {
             background: rgba(9, 13, 21, 0.6);
         }
         .${debugUIClasses["output-column"]} .${debugUIClasses["output"]} {
